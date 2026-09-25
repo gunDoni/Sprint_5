@@ -13,51 +13,39 @@ from data_generation import generate_email, generate_password
 from settings import WAIT_SECONDS, BASE_URL
 
 
-def test_successful_registration(driver):
-    driver.get(f"{BASE_URL}/register")
+class TestRegistration:
+    def test_successful_registration(self, driver):
+        driver.get(f"{BASE_URL}/register")
 
-    # Введи имя
-    driver.find_element(*NAME_INPUT).send_keys("Арсен")
+        driver.find_element(*NAME_INPUT).send_keys("Арсен")
 
-    # Введи email
-    email = generate_email()
-    driver.find_element(*REGISTER_EMAIL_INPUT).send_keys(email)
+        email = generate_email()
+        driver.find_element(*REGISTER_EMAIL_INPUT).send_keys(email)
 
-    # Введи пароль
-    password = generate_password()
-    driver.find_element(*PASSWORD_INPUT).send_keys(password)
+        password = generate_password()
+        driver.find_element(*PASSWORD_INPUT).send_keys(password)
 
-    # Нажми кнопку регистрации
-    driver.find_element(*REGISTER_BUTTON).click()
+        driver.find_element(*REGISTER_BUTTON).click()
 
-    # Дождись появления формы авторизации
-    WebDriverWait(driver, WAIT_SECONDS).until(
-        expected_conditions.visibility_of_element_located(LOGIN_BUTTON)
-    )
+        WebDriverWait(driver, WAIT_SECONDS).until(
+            expected_conditions.visibility_of_element_located(LOGIN_BUTTON)
+        )
 
-    # Проверь, что появилась кнопка «Войти»
-    assert driver.find_element(*LOGIN_BUTTON).is_displayed()
+        assert driver.find_element(*LOGIN_BUTTON).is_displayed()
 
+    def test_registration_with_short_password(self, driver):
+        driver.get(f"{BASE_URL}/register")
 
-def test_registration_with_short_password(driver):
-    driver.get(f"{BASE_URL}/register")
+        driver.find_element(*NAME_INPUT).send_keys("Арсен")
 
-    # Введи имя
-    driver.find_element(*NAME_INPUT).send_keys("Арсен")
+        driver.find_element(*REGISTER_EMAIL_INPUT).send_keys(generate_email())
 
-    # Введи email
-    driver.find_element(*REGISTER_EMAIL_INPUT).send_keys(generate_email())
+        driver.find_element(*PASSWORD_INPUT).send_keys("1234")
 
-    # Введи короткий пароль
-    driver.find_element(*PASSWORD_INPUT).send_keys("1234")
+        driver.find_element(*REGISTER_BUTTON).click()
 
-    # Нажми кнопку регистрации
-    driver.find_element(*REGISTER_BUTTON).click()
+        WebDriverWait(driver, WAIT_SECONDS).until(
+            expected_conditions.visibility_of_element_located(PASSWORD_ERROR_TEXT)
+        )
 
-    # Дождись появления ошибки
-    WebDriverWait(driver, WAIT_SECONDS).until(
-        expected_conditions.visibility_of_element_located(PASSWORD_ERROR_TEXT)
-    )
-
-    # Проверь, что появилась ошибка под полем пароля
-    assert driver.find_element(*PASSWORD_ERROR_TEXT).is_displayed()
+        assert driver.find_element(*PASSWORD_ERROR_TEXT).is_displayed()

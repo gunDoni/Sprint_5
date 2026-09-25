@@ -26,37 +26,35 @@ def perform_login(driver, email, password):
     assert driver.find_element(*ACCOUNT_BUTTON).is_displayed()
 
 
-def test_login_from_main_page(driver, registered_user):
-    email, password = registered_user
+class TestLogin:
+    def test_login_from_main_page(self, driver, registered_user):
+        email, password = registered_user
 
-    driver.get(BASE_URL)
-    driver.find_element(*MAIN_LOGIN_BUTTON).click()
+        driver.get(BASE_URL)
+        driver.find_element(*MAIN_LOGIN_BUTTON).click()
 
-    perform_login(driver, email, password)
+        perform_login(driver, email, password)
 
+    def test_login_from_account_button(self, driver, registered_user):
+        email, password = registered_user
 
-def test_login_from_account_button(driver, registered_user):
-    email, password = registered_user
+        driver.get(BASE_URL)
+        driver.find_element(*ACCOUNT_BUTTON).click()
 
-    driver.get(BASE_URL)
-    driver.find_element(*ACCOUNT_BUTTON).click()
+        perform_login(driver, email, password)
 
-    perform_login(driver, email, password)
+    def test_login_from_register_form(self, driver, registered_user):
+        email, password = registered_user
 
+        driver.get(f"{BASE_URL}/register")
+        driver.find_element(*REGISTER_LOGIN_LINK).click()
 
-def test_login_from_register_form(driver, registered_user):
-    email, password = registered_user
+        perform_login(driver, email, password)
 
-    driver.get(f"{BASE_URL}/register")
-    driver.find_element(*REGISTER_LOGIN_LINK).click()
+    def test_login_from_forgot_password_form(self, driver, registered_user):
+        email, password = registered_user
 
-    perform_login(driver, email, password)
+        driver.get(f"{BASE_URL}/forgot-password")
+        driver.find_element(*FORGOT_LOGIN_LINK).click()
 
-
-def test_login_from_forgot_password_form(driver, registered_user):
-    email, password = registered_user
-
-    driver.get(f"{BASE_URL}/forgot-password")
-    driver.find_element(*FORGOT_LOGIN_LINK).click()
-
-    perform_login(driver, email, password)
+        perform_login(driver, email, password)
