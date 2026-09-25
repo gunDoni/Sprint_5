@@ -16,6 +16,10 @@ class TestConstructorSections:
     def test_constructor_buns(self, driver):
         driver.get(BASE_URL)
         WebDriverWait(driver, WAIT_SECONDS).until(expected_conditions.visibility_of_element_located(BUNS_TAB_ACTIVE))
+        driver.find_element(*SAUCES_TAB).click()
+        WebDriverWait(driver, WAIT_SECONDS).until(expected_conditions.visibility_of_element_located(SAUCES_TAB_ACTIVE))
+        driver.find_element(*BUNS_TAB).click()
+        WebDriverWait(driver, WAIT_SECONDS).until(expected_conditions.visibility_of_element_located(BUNS_TAB_ACTIVE))
         assert driver.find_element(*BUNS_TAB_ACTIVE).is_displayed()
 
     def test_constructor_fillings(self, driver):
