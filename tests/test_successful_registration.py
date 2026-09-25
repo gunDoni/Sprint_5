@@ -27,11 +27,7 @@ class TestRegistration:
 
         driver.find_element(*REGISTER_BUTTON).click()
 
-        WebDriverWait(driver, WAIT_SECONDS).until(
-            expected_conditions.visibility_of_element_located(LOGIN_BUTTON)
-        )
-
-        assert driver.find_element(*LOGIN_BUTTON).is_displayed()
+        assert WebDriverWait(driver, WAIT_SECONDS).until(expected_conditions.visibility_of_element_located(LOGIN_BUTTON))
 
     def test_registration_with_short_password(self, driver):
         driver.get(f"{BASE_URL}/register")
@@ -44,8 +40,4 @@ class TestRegistration:
 
         driver.find_element(*REGISTER_BUTTON).click()
 
-        WebDriverWait(driver, WAIT_SECONDS).until(
-            expected_conditions.visibility_of_element_located(PASSWORD_ERROR_TEXT)
-        )
-
-        assert driver.find_element(*PASSWORD_ERROR_TEXT).is_displayed()
+        assert WebDriverWait(driver, WAIT_SECONDS).until(expected_conditions.visibility_of_element_located(PASSWORD_ERROR_TEXT))
